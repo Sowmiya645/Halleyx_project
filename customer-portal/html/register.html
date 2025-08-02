@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register - Chandelier Decor</title>
+  <link rel="icon" href="../images/logo.jpg" type="image/x-icon" />
+
+  <link rel="stylesheet" href="../css/styles.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fdfdfd;
+      margin: 0;
+      padding: 0;
+    }
+
+    .form-section {
+      max-width: 400px;
+      margin: 60px auto;
+      padding: 40px;
+      background: #fff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+    }
+
+    .form-section h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: #333;
+    }
+
+    form input {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .btn {
+      width: 100%;
+      background-color: #ffd700;
+      color: black;
+      font-weight: bold;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      margin-top: 20px;
+    }
+
+    .btn:hover {
+      background-color: black;
+      color: #ffd700;
+    }
+
+    .form-section p {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .form-section a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .form-section a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="main-header">
+    <div class="header-logo">DecorLite</div>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="form-section">
+      <h2>Create an Account</h2>
+      <form id="registerForm">
+        <input type="text" name="firstName" placeholder="First Name" required />
+        <input type="text" name="lastName" placeholder="Last Name" required />
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <input type="tel" name="phone" placeholder="Phone Number" required />
+        <button type="submit" class="btn">Register</button>
+      </form>
+      <p>Already have an account? <a href="login.html">Login</a></p>
+    </section>
+  </main>
+
+  <footer>
+    <p style="text-align: center;">&copy; 2025 Chandelier Decor. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("registerForm");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const formData = {
+          firstName: form.firstName.value.trim(),
+          lastName: form.lastName.value.trim(),
+          email: form.email.value.trim(),
+          password: form.password.value.trim(),
+          phone: form.phone.value.trim()
+        };
+
+        try {
+          const response = await fetch("http://localhost:5000/api/customers/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
+          });
+
+          window.location.href = "index.html?message=registered";
+        } catch (err) {
+          window.location.href = "index.html?message=registered";
+        }
+      });
+    });
+  </script>
+
+</body>
+
+</html>

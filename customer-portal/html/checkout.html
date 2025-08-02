@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout - Chandelier Decor</title>
+  <link rel="icon" href="../images/logo.jpg" type="image/x-icon" />
+
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+
+<body>
+  <header class="main-header">
+    <div class="header-logo">DecorLite</div>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="cart.html">Cart</a>
+      <a href="orders.html">Orders</a>
+
+    </nav>
+  </header>
+  <style>
+    .btn {
+      background-color: #ffd700;
+      color: black;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      margin-top: 96px;
+    }
+
+
+    .btn:hover {
+      background-color: black;
+      color: #ffd700;
+    }
+  </style>
+  <main>
+    <section class="checkout">
+      <h2>Checkout</h2>
+      <form id="checkout-form">
+        <input type="text" id="name" placeholder="Full Name" required />
+        <input type="text" id="address" placeholder="Address Line 1" required />
+        <input type="text" id="city" placeholder="City" required />
+        <input type="text" id="state" placeholder="State" required />
+        <input type="text" id="zip" placeholder="ZIP" required />
+        <input type="tel" id="phone" placeholder="Phone Number" required />
+        <div style="text-align: center;">
+          <button type="submit" class="btn">Place Order</button>
+        </div>
+      </form>
+
+
+    </section>
+  </main>
+  <script>
+    document.getElementById("checkout-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const customer = {
+        name: document.getElementById("name").value,
+        address: document.getElementById("address").value,
+        city: document.getElementById("city").value,
+        state: document.getElementById("state").value,
+        zip: document.getElementById("zip").value,
+        phone: document.getElementById("phone").value,
+        status: "Active"
+      };
+
+      let customers = JSON.parse(localStorage.getItem("customers")) || [];
+      customers.push(customer);
+      localStorage.setItem("customers", JSON.stringify(customers));
+
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const order = {
+        id: "ORD" + Date.now(),
+        customerName: customer.name,
+        items: cart,
+        total: cart.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0),
+        status: "Confirmed"
+      };
+
+      let orders = JSON.parse(localStorage.getItem("orders")) || [];
+      orders.push(order);
+      localStorage.setItem("orders", JSON.stringify(orders));
+      localStorage.setItem("latestOrder", JSON.stringify(order));
+
+      localStorage.removeItem("cart");
+
+      window.location.href = "orders.html?success=true";
+    });
+  </script>
+
+
+
+
+
+
+  <footer>
+    <p>&copy; 2025 Chandelier Decor. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>

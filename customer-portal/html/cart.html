@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Cart - Chandelier Decor</title>
+  <link rel="icon" href="../images/logo.jpg" type="image/x-icon" />
+
+  <link rel="stylesheet" href="../css/styles.css" />
+  <style>
+    .cart-items {
+      margin: 20px;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid #ccc;
+      padding: 12px 0;
+    }
+
+    .cart-image {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .cart-details {
+      flex-grow: 1;
+    }
+
+    .remove-btn {
+      background-color: #ffd700;
+      border: none;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .remove-btn:hover {
+      background-color: #ffd700;
+      ;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 8px 0;
+    }
+
+    .quantity-btn {
+      padding: 2px 8px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 4px;
+      border: 1px solid #aaa;
+    }
+
+    .cart-total {
+      margin: 20px;
+      font-weight: bold;
+    }
+
+    .checkout-btn {
+      margin: 20px;
+      background-color: #ffd700;
+      border: none;
+      padding: 10px 20px;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font: bolder;
+    }
+
+    .checkout-btn:hover {
+      background-color: black;
+      color: #ffd700;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="main-header">
+    <div class="header-logo">DecorLite</div>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="checkout.html">Checkout</a>
+      <a href="orders.html">Orders</a>
+
+    </nav>
+  </header>
+
+  <main>
+    <section class="cart">
+      <h2>Your Cart</h2>
+      <div id="cart-items" class="cart-items"></div>
+      <div id="cart-total" class="cart-total"></div>
+      <div id="checkout-container"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Chandelier Decor. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const cartItemsContainer = document.getElementById("cart-items");
+      const cartTotalContainer = document.getElementById("cart-total");
+      const checkoutContainer = document.getElementById("checkout-container");
+
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      function updateLocalStorage() {
+        localStorage.setItem("cart", JSON.stringify(cart));
+      }
+
+      function calculateTotal() {
+        return cart.reduce((total, item) => total + (item.price * (item.quantity || 1)), 0);
+      }
+
+      function renderCart() {
+        cartItemsContainer.innerHTML = "";
+        cartTotalContainer.innerHTML = "";
+        checkoutContainer.innerHTML = "";
+
+        if (cart.length === 0) {
+          cartItemsContainer.innerHTML = "<p>Your cart is empty.</p>";
+          return;
+        }
+
+        cart.forEach((item, index) => {
+          if (!item.quantity) item.quantity = 1;
+
+          const itemDiv = document.createElement("div");
+          itemDiv.className = "cart-item";
+
+          const imageFileName = item.image || item.name.replace(/\s+/g, "_") + ".jpg";
+
+          itemDiv.innerHTML = `
+            <img src="../images/${imageFileName}" alt="${item.name}" class="cart-image" />
+            <div class="cart-details">
+              <p><strong>${item.name}</strong></p>
+              <p>₹${item.price}</p>
+
+              <div class="quantity-controls">
+                <button class="quantity-btn decrease" data-index="${index}">-</button>
+                <span>${item.quantity}</span>
+                <button class="quantity-btn increase" data-index="${index}">+</button>
+              </div>
+
+              <button class="remove-btn" data-index="${index}">Remove</button>
+            </div>
+          `;
+
+          cartItemsContainer.appendChild(itemDiv);
+        });
+
+        cartTotalContainer.innerHTML = `Total: ₹${calculateTotal()}`;
+
+        const checkoutBtn = document.createElement("button");
+        checkoutBtn.className = "checkout-btn";
+        checkoutBtn.textContent = "Proceed to Checkout";
+        checkoutBtn.addEventListener("click", () => {
+          const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+
+          if (cartData.length === 0) {
+            alert("Your cart is empty.");
+            return;
+          }
+
+          const orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+          const newOrder = {
+            id: "ORD" + Date.now(),
+            items: cartData,
+            total: cartData.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0),
+            status: "Pending"
+          };
+
+          orders.push(newOrder);
+          localStorage.setItem("orders", JSON.stringify(orders));
+          localStorage.setItem("latestOrder", JSON.stringify(newOrder));
+
+          window.location.href = "checkout.html";
+        });
+
+
+
+        checkoutContainer.appendChild(checkoutBtn);
+
+        document.querySelectorAll(".remove-btn").forEach(btn => {
+          btn.addEventListener("click", function () {
+            const index = this.getAttribute("data-index");
+            cart.splice(index, 1);
+            updateLocalStorage();
+            renderCart();
+          });
+        });
+
+        document.querySelectorAll(".increase").forEach(btn => {
+          btn.addEventListener("click", function () {
+            const index = this.getAttribute("data-index");
+            cart[index].quantity += 1;
+            updateLocalStorage();
+            renderCart();
+          });
+        });
+
+        document.querySelectorAll(".decrease").forEach(btn => {
+          btn.addEventListener("click", function () {
+            const index = this.getAttribute("data-index");
+            if (cart[index].quantity > 1) {
+              cart[index].quantity -= 1;
+              updateLocalStorage();
+              renderCart();
+            }
+          });
+        });
+      }
+
+      renderCart();
+    });
+
+  </script>
+</body>
+
+</html>

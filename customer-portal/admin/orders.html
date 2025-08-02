@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Management - DecorLite</title>
+  <link rel="icon" href="../images/logo.jpg" type="image/x-icon" />
+
+  <link rel="stylesheet" href="../admin/admin.css" />
+</head>
+
+<body>
+  <header class="main-header">
+    <div class="header-logo">DecorLite Admin</div>
+    <nav class="nav-links">
+      <a href="custoomers.html">Dashboard</a>
+      <a href="orders.html" class="active">Order Management</a>
+      <a href="products.html">Product Management</a>
+      <a href="../customer-portal/login.html">Logout</a>
+    </nav>
+  </header>
+  <main class="order-management">
+    <h2>Order Management</h2>
+
+    <div class="filters">
+      <select id="status-filter">
+        <option value="all">Status: All</option>
+        <option value="Pending">Pending</option>
+        <option value="Shipped">Shipped</option>
+        <option value="Delivered">Delivered</option>
+      </select>
+      <input type="date" id="start-date" />
+      <input type="date" id="end-date" />
+      <input type="text" id="customer-search" placeholder="Customer" />
+    </div>
+
+    <table class="orders-table" id="ordersTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Status</th>
+          <th>Total</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </main>
+  <script>
+    function getOrders() {
+      return JSON.parse(localStorage.getItem("orders")) || [];
+    }
+
+    function saveOrders(orders) {
+      localStorage.setItem("orders", JSON.stringify(orders));
+    }
+
+    const newOrder = JSON.parse(localStorage.getItem("latestOrder"));
+    if (newOrder && newOrder.length > 0) {
+      const existingOrders = getOrders();
+      const newOrderEntry = {
+        id: "ORD" + (existingOrders.length + 1).toString().padStart(3, "0"),
+        items: newOrder,
+        customer: "Anonymous",
+        status: "Pending",
+        total: newOrder.reduce((sum, item) => sum + item.price * item.quantity, 0)
+      };
+      existingOrders.push(newOrderEntry);
+      saveOrders(existingOrders);
+      localStorage.removeItem("latestOrder");
+    }
+
+    function renderOrders() {
+      const orders = getOrders();
+      const tbody = document.querySelector("#ordersTable tbody");
+      tbody.innerHTML = "";
+
+      orders.forEach((order, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+      <td>${index + 1}</td>
+      <td>${order.id}</td>
+      <td>${order.customer}</td>
+      <td>${order.status}</td>
+      <td>₹${order.total}</td>
+      <td>
+        <button onclick="viewOrder(${index})">View</button>
+        <button onclick="updateOrder(${index})">Update</button>
+        <button onclick="deleteOrder(${index})">Delete</button>
+      </td>
+    `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function viewOrder(index) {
+      const order = getOrders()[index];
+      alert(`Order Details:\n\nCustomer: ${order.customer}\nItems: ${order.items.map(i => `${i.name} x${i.quantity}`).join(", ")}\nTotal: ₹${order.total}`);
+    }
+
+    function updateOrder(index) {
+      const orders = getOrders();
+      const newStatus = prompt("Update status (Pending, Shipped, Delivered):", orders[index].status);
+      if (newStatus) {
+        orders[index].status = newStatus;
+        saveOrders(orders);
+        renderOrders();
+      }
+    }
+
+    function deleteOrder(index) {
+      if (confirm("Are you sure you want to delete this order?")) {
+        const orders = getOrders();
+        orders.splice(index, 1);
+        saveOrders(orders);
+        renderOrders();
+      }
+    }
+
+    renderOrders();
+  </script>
+
+</body>
+
+</html>

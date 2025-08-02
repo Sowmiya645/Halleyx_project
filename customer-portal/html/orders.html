@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order History - Chandelier Decor</title>
+  <link rel="icon" href="../images/logo.jpg" type="image/x-icon" />
+
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+
+<body>
+  <header class="main-header">
+    <div class="header-logo">DecorLite</div>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="cart.html">Cart</a>
+
+
+    </nav>
+  </header>
+
+  <main>
+    <section class="order-summary">
+      <h2>My Orders</h2>
+      <ul class="order-list">
+        <li>
+          <strong>Order #001</strong> - ₹3,499
+          <br><em>Elegant Crystal Chandelier x1</em>
+        </li>
+        <li>
+          <strong>Order #002</strong> - ₹8,598
+          <br><em>Modern Round Chandelier x2</em>
+        </li>
+      </ul>
+    </section>
+  </main>
+  <div id="order-success" style="display: none; color: green; font-weight: bold;">
+    Your order was placed successfully!
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("success") === "true") {
+      document.getElementById("order-success").style.display = "block";
+    }
+  </script>
+
+  <footer>
+    <p>&copy; 2025 Chandelier Decor. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>

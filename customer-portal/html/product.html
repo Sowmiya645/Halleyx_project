@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Details - Chandelier Decor</title>
+  <link rel="icon" href="../images/logo.jpg" type="image/x-icon" />
+
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+
+<body>
+  <header class="main-header">
+    <div class="header-logo">DecorLite</div>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="product-detail">
+      <img src="images/chandelier1.jpg" alt="Elegant Crystal Chandelier">
+      <div class="details">
+        <h2>Elegant Crystal Chandelier</h2>
+        <p><strong>Price:</strong> ₹3,499</p>
+        <p><strong>Description:</strong> Add sparkle to your space with this classic crystal chandelier. Perfect for
+          living rooms, dining areas, or grand entrances.</p>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" value="1" min="1">
+        <button class="btn" onclick="addToCart()">Add to Cart</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Chandelier Decor. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function addToCart() {
+      const qty = document.getElementById('quantity').value;
+      alert(`${qty} item(s) added to cart.`);
+    }
+  </script>
+</body>
+
+</html>

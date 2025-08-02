@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Product Management - DecorLite</title>
+    <link rel="icon" href="../images/logo.jpg" type="image/x-icon" />
+
+    <link rel="stylesheet" href="../css/admin.css" />
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="header-logo">DecorLite Admin</div>
+        <nav class="nav-links">
+            <a href="admin.html">Dashboard</a>
+            <a href="orders.html">Order Management</a>
+            <a href="products.html" class="active">Product Management</a>
+            <a href="login.html">Logout</a>
+        </nav>
+    </header>
+    <main class="product-management">
+        <h2>Product Management</h2>
+
+        <form id="add-product-form">
+            <input type="text" id="product-name" placeholder="Product Name" required />
+            <input type="text" id="product-desc" placeholder="Description" required />
+            <input type="number" id="product-price" placeholder="Price" required />
+            <input type="number" id="product-stock" placeholder="Stock Quantity" required />
+            <input type="text" id="product-image" placeholder="Image URL" required />
+            <button type="submit">Add Product</button>
+        </form>
+
+
+        <div class="controls">
+            <input type="text" placeholder="Search products..." />
+            <select>
+                <option>Sort by</option>
+                <option>Name</option>
+                <option>Price</option>
+                <option>Stock</option>
+            </select>
+        </div>
+
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Crystal Light</td>
+                    <td>₹4999</td>
+                    <td>10</td>
+                    <td><button>Edit</button><button>Delete</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+    <script>
+        let products = JSON.parse(localStorage.getItem("products")) || [];
+
+        const form = document.getElementById("add-product-form");
+        const tableBody = document.querySelector(".orders-table tbody");
+
+        function renderProducts() {
+            tableBody.innerHTML = "";
+            products.forEach((product, index) => {
+                const row = `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${product.name}</td>
+          <td>₹${product.price}</td>
+          <td>${product.stock}</td>
+          <td>
+            <button>Edit</button>
+            <button onclick="deleteProduct(${index})">Delete</button>
+          </td>
+        </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const newProduct = {
+                name: document.getElementById("product-name").value,
+                description: document.getElementById("product-desc").value,
+                price: parseFloat(document.getElementById("product-price").value),
+                stock: parseInt(document.getElementById("product-stock").value),
+                image: document.getElementById("product-image").value
+            };
+
+            products.push(newProduct);
+            localStorage.setItem("products", JSON.stringify(products));
+            renderProducts();
+            form.reset();
+        });
+
+        function deleteProduct(index) {
+            products.splice(index, 1);
+            localStorage.setItem("products", JSON.stringify(products));
+            renderProducts();
+        }
+
+        renderProducts();
+    </script>
+
+</body>
+
+</html>

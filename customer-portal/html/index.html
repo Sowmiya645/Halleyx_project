@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DecorLite</title>
+  <link rel="icon" href="../images/logo.jpg" type="image/x-icon" />
+
+  <link rel="stylesheet" href="../css/styles.css" />
+
+  <style>
+    .popup-message {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #4BB543;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 9999;
+      font-weight: bold;
+      transition: opacity 1s ease;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="main-header">
+    <div class="header-logo">DecorLite</div>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="register.html">Register</a>
+      <a href="login.html">Login</a>
+      <a href="cart.html">Cart</a>
+      <a href="orders.html">Orders</a>
+    </nav>
+
+  </header>
+  
+
+  <main>
+    <section class="hero">
+      <img src="../images/home-background.jpg" alt="DecorLite Hero" class="hero-image" />
+      <div class="hero-overlay">
+        <div class="hero-content">
+          <h1>Welcome to DecorLite</h1>
+          <p>Elegant lighting for your beautiful spaces</p>
+          <a href="#featured" class="btn">Explore Products</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="featured" id="featured">
+      <h2>Our Top Picks</h2>
+      <div class="product-grid">
+        <div class="product-card">
+          <img src="../images/goldclassic.jpg" alt="Gold Chandelier" />
+          <h4>Gold Classic</h4>
+          <p>₹3,499</p>
+          <button class="btn add-to-cart" data-name="Gold Classic" data-price="3499">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+          <img src="../images/modernglass.jpg" alt="Modern Glass" />
+          <h4>Modern Glass</h4>
+          <p>₹4,250</p>
+          <button class="btn add-to-cart" data-name="Modern Glass" data-price="4250">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+          <img src="../images/rusticwood.jpg" alt="Rustic Wood" />
+          <h4>Rustic Wood</h4>
+          <p>₹3,800</p>
+          <button class="btn add-to-cart" data-name="Rustic Wood" data-price="3800">Add to Cart</button>
+        </div>
+      </div>
+    </section>
+    <div id="message-container"></div>
+
+  </main>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const message = urlParams.get("message");
+
+      if (message === "registered") {
+        const msgDiv = document.createElement("div");
+        msgDiv.className = "popup-message";
+        msgDiv.innerText = "🎉 Registration successful!";
+        document.body.appendChild(msgDiv);
+
+        setTimeout(() => {
+          msgDiv.style.opacity = "0";
+          setTimeout(() => msgDiv.remove(), 1000);
+        }, 5000);
+      }
+    });
+  </script>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const message = urlParams.get("message");
+
+      if (message === "registered" || message === "login") {
+        const msgDiv = document.createElement("div");
+        msgDiv.className = "alert alert-success text-center";
+        msgDiv.innerText = message === "registered"
+          ? "🎉 Registration successful!"
+          : "🎉 Login successful!";
+        msgDiv.style.cssText = `
+        background-color: #d4edda;
+        color: #155724;
+        padding: 15px;
+        margin: 20px auto;
+        border-radius: 8px;
+        max-width: 600px;
+        text-align: center;
+        font-weight: bold;
+      `;
+        document.getElementById("message-container").appendChild(msgDiv);
+
+        setTimeout(() => {
+          msgDiv.remove();
+        }, 5500);
+      }
+    });
+  </script>
+
+
+
+  <footer>
+    <p>&copy; 2025 Chandelier Decor. All rights reserved.</p>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+
+</html>
